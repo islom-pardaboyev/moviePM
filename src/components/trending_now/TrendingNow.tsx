@@ -30,7 +30,7 @@ function TrendingNow() {
           data.results.map((movie, inx: number) => (
             <div onClick={() => navigate(`/movies/${movie.id}`)}
               key={inx}
-              className="min-w-[250px] min-h-[350px] border border-gray-200 rounded-lg overflow-hidden "
+              className="min-w-[250px] cursor-pointer min-h-[350px] border border-gray-200 rounded-lg overflow-hidden "
             >
               <div className="relative  overflow-hidden">
                 <img

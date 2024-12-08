@@ -5,10 +5,13 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { useGetNowPlayingMoviesQuery } from "../../store/api/now-playing-movies";
 import { NowPlayingContext } from "../../utils";
 import { IMG_URL } from "../../hook/useEnv";
+import { Skeleton } from "antd";
+import ContentLoader from "react-content-loader";
 
 export default function HeroSlider() {
-  const { data } = useGetNowPlayingMoviesQuery(1) as {
+  const { data, isLoading } = useGetNowPlayingMoviesQuery(1) as {
     data: NowPlayingContext;
+    isLoading: boolean;
   };
   console.log(data);
   return (
@@ -25,6 +28,22 @@ export default function HeroSlider() {
         modules={[Autoplay, Pagination]}
         className="h-[85vh] mb-10"
       >
+        {isLoading &&
+          Array.from({ length: 5 }).map((_, inx: number) => (
+            <SwiperSlide
+              key={inx}
+              className="relative text-white animate-pulse"
+            >
+              <ContentLoader
+                speed={2}
+                viewBox="0 0 400 160"
+                backgroundColor="#f3f3f3"
+                foregroundColor="#ecebeb"
+              >
+                <rect x="0" y="0"  width="400" height="160" />
+              </ContentLoader>
+            </SwiperSlide>
+          ))}
         {data &&
           data.results.slice(0, 4).map((movie, inx: number) => (
             <SwiperSlide className="relative text-white" key={inx}>
