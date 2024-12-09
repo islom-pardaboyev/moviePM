@@ -7,13 +7,14 @@ import { NowPlayingContext } from "../../utils";
 import { IMG_URL } from "../../hook/useEnv";
 import { Skeleton } from "antd";
 import ContentLoader from "react-content-loader";
+import { useNavigate } from "react-router";
 
 export default function HeroSlider() {
   const { data, isLoading } = useGetNowPlayingMoviesQuery(1) as {
     data: NowPlayingContext;
     isLoading: boolean;
   };
-  console.log(data);
+const navigate = useNavigate();
   return (
     <>
       <Swiper
@@ -56,7 +57,7 @@ export default function HeroSlider() {
                 <h1 className="text-4xl font-bold">{movie.title}</h1>
                 <p className="w-[50vw] line-clamp-2">{movie.overview}</p>
                 <div className="flex items-center gap-x-3">
-                  <button className="bg-black font-medium hover:bg-black/50 py-3 px-7 rounded-lg">
+                  <button onClick={() => navigate(`/movies/${movie.id}`)} className="bg-black font-medium hover:bg-black/50 py-3 px-7 rounded-lg">
                     About Movie
                   </button>
                   <button className="bg-white text-black font-medium py-3 px-7 rounded-lg">
