@@ -1,9 +1,12 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useGetMovieByIdQuery } from "../../store/api/get-movie-by-id-api";
 import { PeopleContext, SingleMovieContext } from "../../utils";
 import { IMG_URL } from "../../hook/useEnv";
 import { useGetMovieActorsQuery } from "../../store/api/get-movie-actors-api";
 import { ArrowRight } from "lucide-react";
+import { useGetMovieVideosQuery } from "../../store/api/get-movie-videos-api";
+import YouTube from "react-youtube";
+import Zoom from "react-medium-image-zoom";
 
 const getRatingColor = (rating: number) => {
   if (rating > 7) return "bg-green-500";
@@ -13,6 +16,7 @@ const getRatingColor = (rating: number) => {
 
 function SingleMovie() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetMovieByIdQuery(id) as {
     data: SingleMovieContext;
     isLoading: boolean;
@@ -20,12 +24,15 @@ function SingleMovie() {
   const { data: actors } = useGetMovieActorsQuery(id) as {
     data: PeopleContext;
   };
-  console.log(actors);
+  const { data: videos } = useGetMovieVideosQuery(id) as {
+    data: { id: number; results: { key: string; id: string }[] };
+  };
+  console.log(data);
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <section>
-      {data && actors && (
+      {data && actors && videos && (
         <div>
           <div className="w-full h-[85vh] relative">
             <div className="absolute top-0 left-0 bg-gradient-to-b from-transparent to-black h-full w-full"></div>
@@ -36,12 +43,14 @@ function SingleMovie() {
             />
             <div className="absolute bottom-1/4  text-white w-full">
               <div className="flex container items-center space-x-5">
-                <img
-                  src={`${IMG_URL}${data.poster_path}`}
-                  className="rounded-lg"
-                  width={300}
-                  alt=""
-                />
+                <Zoom>
+                  <img
+                    src={`${IMG_URL}${data.poster_path}`}
+                    className="rounded-lg"
+                    width={300}
+                    alt=""
+                  />
+                </Zoom>
                 <div className="flex flex-col justify-between space-y-4">
                   <div>
                     <h1 className="text-2xl font-bold">{data.title}</h1>
@@ -61,13 +70,13 @@ function SingleMovie() {
                   <div className="w-[20vw] h-6 border-2 rounded-full overflow-hidden border-gray-300 bg-gray-100 shadow-lg">
                     <div
                       style={{
-                        width: `${Number(data.vote_average.toFixed(2)) * 10}%`,
+                        width: `${data.vote_average * 10}%`,
                       }}
                       className={`h-full ${getRatingColor(
                         Number(data.vote_average.toFixed(2)) * 10
                       )} text-white font-bold text-sm flex items-center justify-center transition-all duration-500 ease-in-out`}
                     >
-                      {Number(data.vote_average.toFixed(2)) * 10}%
+                      {data.vote_average * 10}%
                     </div>
                   </div>
                 </div>
@@ -96,7 +105,7 @@ function SingleMovie() {
                         alt={actor.original_name}
                       />
                       <div className="p-3 bg-gray-900 text-white text-center">
-                        <p className="text-lg font-semibold">
+                        <p className="text-lg font-semibold line-clamp-1">
                           {actor.original_name}
                         </p>
                         <p className="text-sm italic">{actor.character}</p>
@@ -104,12 +113,41 @@ function SingleMovie() {
                     </div>
                   ))}
                   <div className="min-w-fit">
-                    <b className="flex items-center cursor-pointer flex-col hover:text-black/60">Show more  <ArrowRight className="hover:text-black/60" /></b>
+                    <b
+                      onClick={() => navigate(`/actors/${id}`)}
+                      className="flex items-center cursor-pointer flex-col hover:text-black/60"
+                    >
+                      Show more <ArrowRight className="hover:text-black/60" />
+                    </b>
                   </div>
                 </div>
               </div>
-              <div className="col-span-2"></div>
+              <div className="col-span-2 flex flex-col justify-between p-5">
+                <div className="flex flex-col">
+                  <b>Status:</b>
+                  <span>{data.status}</span>
+                </div>
+                <div className="flex flex-col">
+                  <b>Original Language:</b>
+                  <span>{data.spoken_languages[0].english_name}</span>
+                </div>
+                <div className="flex flex-col">
+                  <b>Budget:</b>
+                  <span>${data.budget.toLocaleString()}</span>
+                </div>
+                <div className="flex flex-col">
+                  <b>Revenue:</b>
+                  <span>${data.revenue.toLocaleString()}</span>
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="grid grid-cols-2 container gap-4">
+            {videos.results.map((videos, inx) => (
+              <div key={inx} className="w-full">
+                <YouTube key={videos.id} videoId={videos.key} className="" />
+              </div>
+            ))}
           </div>
         </div>
       )}

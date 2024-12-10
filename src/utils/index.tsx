@@ -10,12 +10,12 @@ export const SuspenseComponent = ({
 
 export const NavbarContext = [
   {
-    label: "Movies",
-    path: "/movies",
+    label: "Popular",
+    path: "/movies/popular",
   },
   {
-    label: "TV Shows",
-    path: "",
+    label: "Now Playing",
+    path: "/movies/now-playing",
   },
   {
     label: "My Watchlist",

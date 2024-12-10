@@ -3,8 +3,8 @@ import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
 import { SuspenseComponent as Suspense } from "../utils";
 import {
+  Actors,
   Home,
-  Movies,
   NowPlaying,
   Popular,
   SingleMovie,
@@ -22,12 +22,7 @@ function CustomRoutes() {
           element: <Home />,
         },
         {
-          path: "/movies",
-          element: (
-            <Suspense>
-              <Movies />
-            </Suspense>
-          ),
+          path: "/movies",      
           children: [
             {
               path: ":id",
@@ -71,6 +66,15 @@ function CustomRoutes() {
             },
           ],
         },
+        {
+          path: '/actors',
+          children: [
+            {
+              path: ':id',
+              element: <Actors/>
+            }
+          ]
+        }
       ])}
       <Footer />
     </main>
