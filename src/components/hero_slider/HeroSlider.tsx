@@ -1,19 +1,30 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/swiper-bundle.css";
 import { Autoplay, Pagination } from "swiper/modules";
-import { useGetNowPlayingMoviesQuery } from "../../store/api/now-playing-movies";
+import { useGetNowPlayingMoviesQuery } from "../../store/api/get-now-playing-movies";
 import { NowPlayingContext } from "../../utils";
 import { IMG_URL } from "../../hook/useEnv";
-import { Skeleton } from "antd";
 import ContentLoader from "react-content-loader";
 import { useNavigate } from "react-router";
+import { useAddToWatchlistMutation } from "../../store/api/add-to-watchlist";
+
+
 
 export default function HeroSlider() {
+  const [addToWatchlist] = useAddToWatchlistMutation()
+  const handleAddWatchlist = (id: number) => {
+    const data = {
+      "media_type": "movie",
+      "media_id": id,
+      "watchlist": true
+    }
+    addToWatchlist(data).then(res => console.log(res))
+  }
   const { data, isLoading } = useGetNowPlayingMoviesQuery(1) as {
     data: NowPlayingContext;
     isLoading: boolean;
   };
+  
 const navigate = useNavigate();
   return (
     <>
@@ -60,7 +71,7 @@ const navigate = useNavigate();
                   <button onClick={() => navigate(`/movies/${movie.id}`)} className="bg-black font-medium hover:bg-black/50 py-3 px-7 rounded-lg">
                     About Movie
                   </button>
-                  <button className="bg-white text-black font-medium py-3 px-7 rounded-lg">
+                  <button onClick={() => handleAddWatchlist(movie.id)} className="bg-white text-black font-medium py-3 px-7 rounded-lg">
                     Add to Watchlist
                   </button>
                 </div>

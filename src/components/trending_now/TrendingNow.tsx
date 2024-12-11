@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { IMG_URL } from "../../hook/useEnv";
-import { useGetNowPlayingMoviesQuery } from "../../store/api/now-playing-movies";
+import { useGetNowPlayingMoviesQuery } from "../../store/api/get-now-playing-movies"; 
 import { NowPlayingContext } from "../../utils";
 
 function TrendingNow() {

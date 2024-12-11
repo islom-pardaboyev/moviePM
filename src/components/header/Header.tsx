@@ -1,43 +1,69 @@
-import { Link } from "react-router";
-import { NavbarContext } from "../../utils";
-import { Select } from "antd";
+import { Link, useNavigate } from "react-router";
+import { Movie, NavbarContext, SearchMovieList } from "../../utils";
+import { AutoComplete, Badge } from "antd";
+import { useState } from "react";
+import { useSearchMovieQuery } from "../../store/api/search-movie-api";
+import { useGetWatchlistMoviesQuery } from "../../store/api/get-watchlist-movies-api";
 
 function Header() {
+  const navigate = useNavigate();
+  const [searchedText, setSearchedtext] = useState<string>("");
+  const { data: watchlistMovies } = useGetWatchlistMoviesQuery(true) as {
+    data: { results: Movie[] };
+  };
+  console.log(watchlistMovies);
+  const { data } = useSearchMovieQuery(searchedText) as {
+    data: SearchMovieList;
+  };
+  const [options, setOptions] = useState<{ value: number; label: string }[]>();
+  const handleChange = (e: string) => {
+    if (e) {
+      setSearchedtext(e);
+      const result = data.results.map((movie) => ({
+        value: movie.id,
+        label: movie.title,
+      }));
+      setOptions(result);
+    }
+  };
+  const handleChooseMovie = (_: string, b: { value: number }) => {
+    navigate(`/movies/${b.value}`);
+  };
+  console.log(data);
+  console.log(options);
   return (
-    <header className="py-3">
-      <div className="container flex items-center justify-between">
-        <a href="/" className="text-2xl font-bold">MoviePM</a>
-        <nav className="flex items-center text-sm font-medium gap-x-4">
-          {NavbarContext.map((item, inx: number) => (
-            <Link
-              to={item.path}
-              className="border-b border-transparent hover:border-black"
-              key={inx}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="flex items-center gap-x-2">
-          <Select
-            className="w-[300px]"
-            size="middle"
-            showSearch
-            placeholder="Select a person"
-            filterOption={(input, option) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-            options={[
-              { value: "1", label: "Jack" },
-              { value: "2", label: "Lucy" },
-              { value: "3", label: "Tom" },
-            ]}
-          />
-          <button className="px-4 rounded py-2 text-sm font-medium text-white bg-black hover:bg-gray-800">
-            Sign In
-          </button>
+    <header className="py-3 border-b">
+      {watchlistMovies && (
+        <div className="container flex items-center justify-between">
+          <a href="/" className="text-2xl font-bold">
+            MoviePM
+          </a>
+          <nav className="text-sm font-medium">
+            {NavbarContext.map((item, inx) => (
+              <Link key={inx} to={item.path}>
+                {item.badge && (
+                  <Badge count={watchlistMovies.results.length}>
+                    {item.label}
+                  </Badge>
+                )}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-x-2">
+            <AutoComplete
+              onSearch={handleChange}
+              allowClear
+              options={options}
+              onSelect={handleChooseMovie}
+              style={{ width: 300 }}
+              placeholder="Search movies"
+            />
+            <button className="px-4 rounded py-2 text-sm font-medium text-white bg-black hover:bg-gray-800">
+              Sign In
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </header>
   );
 }

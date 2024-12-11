@@ -10,6 +10,7 @@ import {
   SingleMovie,
   TopRated,
   UpComing,
+  Watchlist,
 } from "../pages";
 
 function CustomRoutes() {
@@ -22,7 +23,7 @@ function CustomRoutes() {
           element: <Home />,
         },
         {
-          path: "/movies",      
+          path: "/movies",
           children: [
             {
               path: ":id",
@@ -67,14 +68,26 @@ function CustomRoutes() {
           ],
         },
         {
-          path: '/actors',
+          path: "/actors",
           children: [
             {
-              path: ':id',
-              element: <Actors/>
-            }
-          ]
-        }
+              path: ":id",
+              element: (
+                <Suspense>
+                  <Actors />
+                </Suspense>
+              ),
+            },
+          ],
+        },
+        {
+          path: "/watchlist",
+          element: (
+            <Suspense>
+              <Watchlist />
+            </Suspense>
+          ),
+        },
       ])}
       <Footer />
     </main>

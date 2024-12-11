@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-
 const Loading = () => <div>Loading...</div>;
 
 export const SuspenseComponent = ({
@@ -8,24 +7,15 @@ export const SuspenseComponent = ({
   children: React.ReactNode;
 }) => <Suspense fallback={<Loading />}>{children}</Suspense>;
 
-export const NavbarContext = [
-  {
-    label: "Popular",
-    path: "/movies/popular",
-  },
-  {
-    label: "Now Playing",
-    path: "/movies/now-playing",
-  },
-  {
-    label: "My Watchlist",
-    path: "",
-  },
-];
-
 export type NowPlayingContext = {
   results: Movie[];
 };
+
+export const NavbarContext = [{
+  label: 'My Watchlist',
+  path: '/watchlist',
+  badge: true
+}]
 
 export type Movie = {
   adult: false;
@@ -90,6 +80,7 @@ export type PeopleContext = {
 }
 
 export type SinglePeople = {
+  job?: string;
   adult: false;
   cast_id: number;
   character: string;
@@ -102,4 +93,11 @@ export type SinglePeople = {
   original_name: string;
   popularity: number;
   profile_path: string;
+}
+
+export type SearchMovieList = {
+  page: number;
+  total_pages: number;
+  total_results: number;
+  results: Movie[];
 }

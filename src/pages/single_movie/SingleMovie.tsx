@@ -7,6 +7,8 @@ import { ArrowRight } from "lucide-react";
 import { useGetMovieVideosQuery } from "../../store/api/get-movie-videos-api";
 import YouTube from "react-youtube";
 import Zoom from "react-medium-image-zoom";
+import CameraOff from "../../assets/camera-off.svg";
+import { useAddToWatchlistMutation } from "../../store/api/add-to-watchlist";
 
 const getRatingColor = (rating: number) => {
   if (rating > 7) return "bg-green-500";
@@ -15,6 +17,15 @@ const getRatingColor = (rating: number) => {
 };
 
 function SingleMovie() {
+  const [addToWatchlist] = useAddToWatchlistMutation()
+  const handleAddWatchlist = (id: number) => {
+    const data = {
+      "media_type": "movie",
+      "media_id": id,
+      "watchlist": true
+    }
+    addToWatchlist(data).then(res => console.log(res))
+  }
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetMovieByIdQuery(id) as {
@@ -28,7 +39,32 @@ function SingleMovie() {
     data: { id: number; results: { key: string; id: string }[] };
   };
   console.log(data);
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <section className="animate-pulse">
+        <div>
+          <div className="w-full h-[85vh] relative">
+            <div className="h-full w-full bg-gray-200"></div>
+          </div>
+          <div className="container mt-10">
+            <div className="h-6 mb-5 bg-gray-200 rounded"></div>
+            <div className="grid grid-cols-12 gap-6">
+              <div className="col-span-9 bg-gray-200 h-20 mb-3"></div>
+              <div className="col-span-3 p-5 space-y-4">
+                <div className="h-6 bg-gray-200 rounded"></div>
+                <div className="h-6 bg-gray-200 rounded"></div>
+                <div className="h-6 bg-gray-200 rounded"></div>
+                <div className="h-6 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 mt-10 container gap-4">
+            <div className="h-64 bg-gray-200 rounded"></div>
+            <div className="h-64 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </section>
+    );
 
   return (
     <section>
@@ -42,7 +78,7 @@ function SingleMovie() {
               alt="Movie backdrop"
             />
             <div className="absolute bottom-1/4  text-white w-full">
-              <div className="flex container items-center space-x-5">
+              <div className="flex container items-end space-x-5">
                 <Zoom>
                   <img
                     src={`${IMG_URL}${data.poster_path}`}
@@ -51,7 +87,7 @@ function SingleMovie() {
                     alt=""
                   />
                 </Zoom>
-                <div className="flex flex-col justify-between space-y-4">
+                <div className="flex backdrop-blur-md p-5 rounded-lg border border-gray-500 flex-col justify-between space-y-4">
                   <div>
                     <h1 className="text-2xl font-bold">{data.title}</h1>
                     <p className="italic text-gray-400">{data.tagline}</p>
@@ -79,6 +115,7 @@ function SingleMovie() {
                       {data.vote_average * 10}%
                     </div>
                   </div>
+                  <button onClick={() => handleAddWatchlist(data.id)} className="float-end text-white font-bold border rounded-lg hover:bg-white hover:text-black duration-300 w-fit p-2">Add to watchlist</button>
                 </div>
               </div>
             </div>
@@ -88,7 +125,7 @@ function SingleMovie() {
               Actors
             </h1>
             <div className="grid grid-cols-12 gap-6">
-              <div className="col-span-10">
+              <div className="col-span-9">
                 <div className="flex items-center overflow-x-auto gap-5 py-4">
                   {actors.cast.slice(0, 10).map((actor, inx) => (
                     <div
@@ -98,10 +135,7 @@ function SingleMovie() {
                       <img
                         src={`${IMG_URL}${actor.profile_path}`}
                         className="w-full h-[300px] object-cover"
-                        onError={(e) =>
-                          (e.currentTarget.src =
-                            "https://placehold.co/600x400?text=No+Image")
-                        }
+                        onError={(e) => (e.currentTarget.src = CameraOff)}
                         alt={actor.original_name}
                       />
                       <div className="p-3 bg-gray-900 text-white text-center">
@@ -122,7 +156,7 @@ function SingleMovie() {
                   </div>
                 </div>
               </div>
-              <div className="col-span-2 flex flex-col justify-between p-5">
+              <div className="col-span-3 flex flex-col justify-between p-5">
                 <div className="flex flex-col">
                   <b>Status:</b>
                   <span>{data.status}</span>
@@ -142,7 +176,7 @@ function SingleMovie() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 container gap-4">
+          <div className="grid grid-cols-2 mt-10 container gap-4">
             {videos.results.map((videos, inx) => (
               <div key={inx} className="w-full">
                 <YouTube key={videos.id} videoId={videos.key} className="" />
