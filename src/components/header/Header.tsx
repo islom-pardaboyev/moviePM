@@ -11,7 +11,6 @@ function Header() {
   const { data: watchlistMovies } = useGetWatchlistMoviesQuery(true) as {
     data: { results: Movie[] };
   };
-  console.log(watchlistMovies);
   const { data } = useSearchMovieQuery(searchedText) as {
     data: SearchMovieList;
   };
@@ -29,8 +28,6 @@ function Header() {
   const handleChooseMovie = (_: string, b: { value: number }) => {
     navigate(`/movies/${b.value}`);
   };
-  console.log(data);
-  console.log(options);
   return (
     <header className="py-3 border-b">
       {watchlistMovies && (

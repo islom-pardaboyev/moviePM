@@ -2,9 +2,9 @@ import { useNavigate, useParams } from "react-router";
 import { IMG_URL } from "../../hook/useEnv";
 import { useGetMovieByIdQuery } from "../../store/api/get-movie-by-id-api";
 import { Movie, PeopleContext } from "../../utils";
-import { MoveLeft } from "lucide-react";
 import { useGetMovieActorsQuery } from "../../store/api/get-movie-actors-api";
 import ActorsCard from "../../components/actors_card/ActorsCard";
+import { CgMoveLeft } from "react-icons/cg";
 
 function Actors() {
   const { id } = useParams();
@@ -13,7 +13,6 @@ function Actors() {
     data: PeopleContext;
   };
   const { data: movie } = useGetMovieByIdQuery(id) as { data: Movie };
-  console.log(actors);
   return (
     <section>
       {actors && movie && (
@@ -35,7 +34,7 @@ function Actors() {
                     onClick={() => navigate(-1)}
                     className="flex text-[#9AA6B2] cursor-pointer items-center gap-2"
                   >
-                    <MoveLeft color="#9AA6B2" />
+                    <CgMoveLeft color="#9AA6B2" />
                     <p>Back to main</p>
                   </span>
                 </div>

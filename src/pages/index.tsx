@@ -6,5 +6,6 @@ import SingleMovie from "./single_movie/SingleMovie";
 import NowPlaying from "./now_playing/NowPlaying";
 import Actors from "./actors/Actors";
 import Watchlist from "./watchlist/Watchlist";
+import Person from "./person/Person";
 
-export { Home, UpComing, NowPlaying, TopRated, Popular, SingleMovie, Actors, Watchlist };
+export { Home, Person, UpComing, NowPlaying, TopRated, Popular, SingleMovie, Actors, Watchlist };

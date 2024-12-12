@@ -18,7 +18,7 @@ export default function HeroSlider() {
       "media_id": id,
       "watchlist": true
     }
-    addToWatchlist(data).then(res => console.log(res))
+    addToWatchlist(data)
   }
   const { data, isLoading } = useGetNowPlayingMoviesQuery(1) as {
     data: NowPlayingContext;

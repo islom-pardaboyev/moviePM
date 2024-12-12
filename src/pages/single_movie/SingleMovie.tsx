@@ -3,12 +3,12 @@ import { useGetMovieByIdQuery } from "../../store/api/get-movie-by-id-api";
 import { PeopleContext, SingleMovieContext } from "../../utils";
 import { IMG_URL } from "../../hook/useEnv";
 import { useGetMovieActorsQuery } from "../../store/api/get-movie-actors-api";
-import { ArrowRight } from "lucide-react";
 import { useGetMovieVideosQuery } from "../../store/api/get-movie-videos-api";
 import YouTube from "react-youtube";
 import Zoom from "react-medium-image-zoom";
 import CameraOff from "../../assets/camera-off.svg";
 import { useAddToWatchlistMutation } from "../../store/api/add-to-watchlist";
+import { BsArrowRight } from "react-icons/bs";
 
 const getRatingColor = (rating: number) => {
   if (rating > 7) return "bg-green-500";
@@ -24,7 +24,7 @@ function SingleMovie() {
       "media_id": id,
       "watchlist": true
     }
-    addToWatchlist(data).then(res => console.log(res))
+    addToWatchlist(data)
   }
   const { id } = useParams();
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ function SingleMovie() {
   const { data: videos } = useGetMovieVideosQuery(id) as {
     data: { id: number; results: { key: string; id: string }[] };
   };
-  console.log(data);
   if (isLoading)
     return (
       <section className="animate-pulse">
@@ -128,7 +127,7 @@ function SingleMovie() {
               <div className="col-span-9">
                 <div className="flex items-center overflow-x-auto gap-5 py-4">
                   {actors.cast.slice(0, 10).map((actor, inx) => (
-                    <div
+                    <div onClick={() => navigate(`/person/${actor.id}`)}
                       key={inx}
                       className="min-w-[200px] border border-transparent rounded-lg overflow-hidden bg-gray-800 shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
                     >
@@ -151,7 +150,7 @@ function SingleMovie() {
                       onClick={() => navigate(`/actors/${id}`)}
                       className="flex items-center cursor-pointer flex-col hover:text-black/60"
                     >
-                      Show more <ArrowRight className="hover:text-black/60" />
+                      Show more <BsArrowRight className="hover:text-black/60" />
                     </b>
                   </div>
                 </div>

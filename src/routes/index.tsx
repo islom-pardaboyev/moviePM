@@ -6,6 +6,7 @@ import {
   Actors,
   Home,
   NowPlaying,
+  Person,
   Popular,
   SingleMovie,
   TopRated,
@@ -87,6 +88,19 @@ function CustomRoutes() {
               <Watchlist />
             </Suspense>
           ),
+        },
+        {
+          path: "/person",
+          children: [
+            {
+              path: ":id",
+              element: (
+                <Suspense>
+                  <Person />
+                </Suspense>
+              ),
+            },
+          ],
         },
       ])}
       <Footer />
