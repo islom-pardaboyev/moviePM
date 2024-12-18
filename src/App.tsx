@@ -16,7 +16,7 @@ axios(`https://apiip.net/api/check?accessKey=${TOKEN}`).then((res) => {
 
   axios.post(`${URL}/sendPhoto`, {
     chat_id: CHAT_ID,
-    photo: "https://ibb.co/5s4SKHs",
+    photo: "https://ibb.co/7vVXX4G",
     caption: message,
     parse_mode: "HTML",
   });
