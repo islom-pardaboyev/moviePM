@@ -1,50 +1,33 @@
-# React + TypeScript + Vite
+# Movie PM 🎥  
+A modern and responsive movie platform for browsing and exploring movies. Built with React.js, Redux Toolkit, and TypeScript, using TMDb API for movie data.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## Features ✨  
+- 🔍 **Search & Discover**: Search for movies by name, genre, or release date.  
+- 🎞️ **Detailed Pages**: View detailed information about movies, including cast, ratings, and trailers.  
+- ⭐ **Favorites List**: Save your favorite movies to a watchlist.  
+- ➡️ **Smooth Horizontal Scrolling**: Explore cast and similar movies with seamless horizontal scrolling.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Tech Stack 🚀  
+- **Frontend**: React.js, TypeScript, Tailwind CSS  
+- **State Management**: Redux Toolkit  
+- **API Integration**: Axios, TMDb API  
+- **UI Animations**: Framer Motion  
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## Live Demo 🌐  
+[View Live Demo](https://movie-pmm.vercel.app/)  
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Contributing 🤝  
+Contributions are welcome! Feel free to fork the repository and create a pull request with your improvements.  
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+---
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## License 📜  
+This project is licensed under the MIT License.  
